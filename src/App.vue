@@ -6,6 +6,8 @@
       <CurrentConditions :conditions="conditions.current" />
       <PrecipitationGraph :precip="conditions.minutely" />
       <Map :lat="location.lat" :lon="location.lon" />
+      <HourlyConditions :conditions="conditions.hourly" />
+       <DailyConditions :conditions="conditions.daily" />
     </div>
   </transition>
 
@@ -19,6 +21,8 @@
 <script>
 import Map from './components/weather/Map'
 import CurrentConditions from './components/weather/CurrentConditions'
+import HourlyConditions from './components/weather/HourlyConditions'
+import DailyConditions from './components/weather/DailyConditions'
 import Setup from './components/setup/Setup'
 import PrecipitationGraph from './components/weather/measures/PrecipitationGraph'
 
@@ -27,6 +31,8 @@ export default {
   components: {
     Map,
     CurrentConditions,
+    HourlyConditions,
+    DailyConditions,
     Setup,
     PrecipitationGraph
   },
@@ -89,7 +95,7 @@ export default {
     },
     fetchConditions(location, callback) {
       console.log(this.$refs)
-       fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${location.lat}&lon=${location.lon}&exclude=daily&appid=${localStorage.getItem('owmKey')}`).then(res => res.json()).then(conditions => {
+       fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${location.lat}&lon=${location.lon}&appid=${localStorage.getItem('owmKey')}`).then(res => res.json()).then(conditions => {
         callback(conditions)
         localStorage.setItem('conditionCache', JSON.stringify(conditions))
       })

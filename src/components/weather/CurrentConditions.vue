@@ -1,11 +1,12 @@
 <template>
     <div id="current-conditions">
-        <table><tr>
-        <td>
+
         <div id="main-conditions">
             <Measure id="current-temperature" :condition="conditions.temp" inputUnit="tempK" type="temperature" :measurements="measurements" />
             <ConditionIcon id="current-condition-icon" :condition="conditions" />
-        </div></td>
+        </div>
+
+        <table><tr>
         <td><table id="detail-conditions">
             <tr>
                 <td><v-icon>mdi-weather-windy</v-icon></td>
@@ -13,16 +14,15 @@
                
                 <td><v-icon>mdi-water-outline</v-icon></td>
                 <td><span>{{conditions.humidity}}%</span></td>
-            </tr>
-            <tr>
+
                 <td><v-icon>mdi-cloud-outline</v-icon></td>
                 <td><span>{{conditions.clouds}}%</span></td>
-               
-                <td><v-icon>mdi-eye-outline</v-icon></td>
-                <td><Measure :condition="conditions.visibility" inputUnit="m" type="distance" :measurements="measurements" /></td>
             </tr>
             <tr>
-                <td><v-icon>mdi-speedometer</v-icon></td>
+                <td><v-icon :color="uvColor">mdi-shield-sun</v-icon></td>
+                <td>{{Math.round(conditions.uvi)}}</td>
+
+                 <td><v-icon>mdi-speedometer</v-icon></td>
                 <td><span>{{(conditions.pressure/1000).toFixed(2)}} bar</span></td>
                
                 <td><v-icon>mdi-weather-{{nextSolarEvent.type}}</v-icon></td>
@@ -52,6 +52,21 @@
             Measure
         },
         computed: {
+            uvColor() {
+                if(!this.conditions.uvi) return 'white'
+
+                let uvi = Math.round(this.conditions.uvi)
+                let color = ''
+
+                if(uvi <= 2) color = 'green lighten-2';
+                else if(uvi <= 5) color = 'yellow';
+                else if(uvi <= 7) color = 'orange lighten-2';
+                else if(uvi <= 10) color = 'red lighten-2';
+                else color = 'purple lighten-2';
+
+                return color
+
+            },
             measurements() {
                 return window.localStorage.getItem('measurements')
             },

@@ -18,12 +18,15 @@
                 let ts = json[json.length-1]
                 self.map = L.map('map', {
                     attributionControl: true,
-                    zoomControl: false
-                }).setView([this.lat, this.lon], 10);
+                    zoomControl: true,
+                    scrollWheelZoom: false,
+                    center: [this.lat, this.lon],
+                    zoom: 10
+                });
                 L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
                     attribution: 'Carto (CC BY 3.0), OpenStreetMap (ODbL)'
                 }).addTo(self.map);
-                let radar = L.tileLayer(`https://tilecache.rainviewer.com/v2/radar/${ts}/512/{z}/{x}/{y}/8/1_1.png`, {
+                let radar = L.tileLayer(`https://tilecache.rainviewer.com/v2/radar/${ts}/512/{z}/{x}/{y}/8/0_1.png`, {
                     attribution: 'RainViewer'
                 }).setOpacity(0.75).addTo(self.map);
                 window.setInterval(() => {radar.redraw()}, 300000)
@@ -58,5 +61,15 @@
 
     .leaflet-container .leaflet-control-attribution * {
         color: #ddd;
+    }
+
+    .leaflet-bar a, .leaflet-bar a:hover {
+        background-color: #161616;
+        border-bottom: none;
+        color: white !important;
+        font-weight: normal;
+    }
+    .leaflet-bar a:hover {
+        background-color: #222;
     }
 </style>
